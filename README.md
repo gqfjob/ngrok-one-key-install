@@ -18,9 +18,38 @@ chmod 500 ./install_ngrok.sh
 	Usage: /etc/init.d/ngrokd {start|stop|restart|status|config|adduser|deluser|userlist|info}
 	Usage: /etc/init.d/ngrokd deluser {username}
 
-~~*### 自己编译安装*~~
+### 补充说明
 
-~~*执行命令:*~~
-~~*wget --no-check-certificate https://github.com/clangcn/ngrok-one-key-install/raw/master/ngrok_install.sh -O ./ngrok_install.sh*~~
-~~*chmod 500 ./ngrok_install.sh*~~
-~~*./ngrok_install.sh*~~
+对于mac client端，需要执行 /etc/init.d/ngrokd config 设置password为空，否则好像无法通过认证
+
+添加用户 /etc/init.d/ngrokd adduser返回结果
+
+```
+Server: ng.xxx.com
+Server  4443
+userId: xx
+authId: mmmmmmmmm
+Subdomain: "wx"
+Your FQDN: "wx.ng.xxx.com"
+```
+
+对于 client conf文件
+```
+server_addr: ng.xxxcom:4443
+trust_host_root_certs: false
+inspect_addr: disabled
+auth_token: xx
+password: mmmmmmmmm
+
+tunnels:
+    httptun:
+        remote_port: 80
+        subdomain: "wx"
+        proto:
+            http: 192.168.1.150:80
+```
+
+客户端命令
+```
+./ngrok -config xx.cfg start httptun
+```
